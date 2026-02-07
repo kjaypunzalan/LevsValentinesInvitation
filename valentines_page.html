@@ -103,16 +103,24 @@
       const scale = Math.max(1, 2 - distance / 200);
       yesBtn.style.transform = `scale(${scale})`;
 
-      // NO button avoidance
+      // NO button avoidance (fixed-distance dodge, stays in bounds)
       const noRect = noBtn.getBoundingClientRect();
       const noCenterX = noRect.left + noRect.width / 2;
       const noCenterY = noRect.top + noRect.height / 2;
 
       const noDistance = Math.hypot(e.clientX - noCenterX, e.clientY - noCenterY);
+      const safeDistance = 140; // fixed dodge distance
 
-      if (noDistance < 120) {
-        let newX = Math.random() * (window.innerWidth - noRect.width);
-        let newY = Math.random() * (window.innerHeight - noRect.height - 100) + 100;
+      if (noDistance < safeDistance) {
+        const angle = Math.atan2(noCenterY - e.clientY, noCenterX - e.clientX);
+
+        let newX = noCenterX + Math.cos(angle) * safeDistance - noRect.width / 2;
+        let newY = noCenterY + Math.sin(angle) * safeDistance - noRect.height / 2;
+
+        // keep inside viewport
+        const padding = 10;
+        newX = Math.min(Math.max(padding, newX), window.innerWidth - noRect.width - padding);
+        newY = Math.min(Math.max(100, newY), window.innerHeight - noRect.height - padding);
 
         noBtn.style.left = `${newX}px`;
         noBtn.style.top = `${newY}px`;
