@@ -1,137 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Will you be my Valentines?</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Kuya Levs</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #ffcccc 100%);
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
 
-    body {
-      margin: 0;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #ffffff, #ff4d6d);
-      transition: background 0.5s ease;
-    }
+        /* Success Text Container */
+        #headerContainer {
+            z-index: 10;
+            padding: 20px 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 80%;
+            transition: background 0.5s ease;
+        }
 
-    .container {
-      text-align: center;
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
+        h1 {
+            color: #d63384;
+            font-size: 2.8rem;
+            margin: 0;
+            pointer-events: none;
+        }
 
-    h1 {
-      font-size: 2.5rem;
-      color: #b3003b;
-      margin-bottom: 40px;
-    }
+        /* The wrapper that keeps both buttons centered but spaced out */
+        .button-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 150px; /* Increased gap to keep them farther apart */
+            width: 100%;
+            height: 250px;
+            margin-top: 30px;
+        }
 
-    .buttons {
-      position: relative;
-      width: 100%;
-      height: 300px;
-    }
+        button {
+            padding: 15px 40px;
+            font-size: 1.6rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
 
-    button {
-      position: absolute;
-      padding: 15px 35px;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            z-index: 100;
+            transition: transform 0.1s ease;
+        }
 
-    #yesBtn {
-      background-color: #ff4d6d;
-      color: white;
-      left: 40%;
-      top: 100px;
-    }
+        #noBtn {
+            background-color: #6c757d;
+            color: white;
+            position: relative;
+            z-index: 90;
+            transition: transform 0.2s ease-out;
+        }
 
-    #noBtn {
-      background-color: #cccccc;
-      color: #333;
-      left: 55%;
-      top: 100px;
-      cursor: not-allowed;
-    }
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 22px;
+            user-select: none;
+            pointer-events: none;
+            animation: float 4s linear infinite;
+            z-index: 1;
+        }
 
-    .celebrate {
-      background: url('YOUR_FIREWORKS_GIF_HERE.gif') center / cover no-repeat;
-    }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
 
-    .celebrate h1 {
-      color: white;
-      background: rgba(0,0,0,0.5);
-      padding: 20px;
-      border-radius: 15px;
-    }
-  </style>
+        /* Success State */
+        .celebrate {
+            background-image: url('https://i.makeagif.com/media/6-08-2017/rJ9XF_.gif');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .text-box-active {
+            background-color: rgba(0, 0, 0, 0.7); /* Transparent black */
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .text-box-active h1 {
+            color: #ffffff; /* Make text white on the black background */
+        }
+    </style>
 </head>
-<body>
-  <div class="container" id="container">
-    <h1 id="title">Will you be my Valentines, Kuya Levs?</h1>
+<body id="body">
 
-    <div class="buttons">
-      <button id="yesBtn">Yes</button>
-      <button id="noBtn">No</button>
+    <audio id="bgMusic" loop>
+        <source src="https://soundcloud.com/poc-askwhatitmeans/happy-valentines-day-smooth-rb-instrumental?si=fca88d81281241298e6c9aa1e1348742&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" type="audio/mpeg">
+    </audio>
+
+    <div id="headerContainer">
+        <h1 id="questionText">Will you be my Valentines, Kuya Levs?</h1>
     </div>
-  </div>
 
-  <script>
-    const yesBtn = document.getElementById('yesBtn');
-    const noBtn = document.getElementById('noBtn');
-    const container = document.getElementById('container');
-    const title = document.getElementById('title');
+    <div class="button-wrapper">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
 
-    document.addEventListener('mousemove', (e) => {
-      // YES button scaling
-      const yesRect = yesBtn.getBoundingClientRect();
-      const yesCenterX = yesRect.left + yesRect.width / 2;
-      const yesCenterY = yesRect.top + yesRect.height / 2;
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const body = document.getElementById('body');
+        const questionText = document.getElementById('questionText');
+        const headerContainer = document.getElementById('headerContainer');
+        const music = document.getElementById('bgMusic');
 
-      const distance = Math.hypot(e.clientX - yesCenterX, e.clientY - yesCenterY);
-      const scale = Math.max(1, 2 - distance / 200);
-      yesBtn.style.transform = `scale(${scale})`;
+        // --- ADJUSTABLE SETTINGS ---
+        const maxNoMovement = 300; 
 
-      // NO button avoidance (fixed-distance dodge, stays in bounds)
-      const noRect = noBtn.getBoundingClientRect();
-      const noCenterX = noRect.left + noRect.width / 2;
-      const noCenterY = noRect.top + noRect.height / 2;
+        // --- FLOATING HEARTS ---
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
 
-      const noDistance = Math.hypot(e.clientX - noCenterX, e.clientY - noCenterY);
-      const safeDistance = 140; // fixed dodge distance
+        // --- MOUSE INTERACTION ---
+        document.addEventListener('mousemove', (e) => {
+            // YES BUTTON: Grow
+            const yesRect = yesBtn.getBoundingClientRect();
+            const yesX = yesRect.left + yesRect.width / 2;
+            const yesY = yesRect.top + yesRect.height / 2;
+            const distToYes = Math.sqrt(Math.pow(e.clientX - yesX, 2) + Math.pow(e.clientY - yesY, 2));
+            
+            const yesMaxDist = 400;
+            let yesScale = 1 + (Math.max(0, yesMaxDist - distToYes) / yesMaxDist) * 1.5;
+            yesBtn.style.transform = `scale(${yesScale})`;
 
-      if (noDistance < safeDistance) {
-        const angle = Math.atan2(noCenterY - e.clientY, noCenterX - e.clientX);
+            // NO BUTTON: Move and Shrink
+            const noRect = noBtn.getBoundingClientRect();
+            const noX = noRect.left + noRect.width / 2;
+            const noY = noRect.top + noRect.height / 2;
+            const distToNo = Math.sqrt(Math.pow(e.clientX - noX, 2) + Math.pow(e.clientY - noY, 2));
 
-        let newX = noCenterX + Math.cos(angle) * safeDistance - noRect.width / 2;
-        let newY = noCenterY + Math.sin(angle) * safeDistance - noRect.height / 2;
+            const noMaxDist = 50; // Distance where it starts shrinking
+            let noScale = 1;
+            let translateX = 0;
+            let translateY = 0;
 
-        // keep inside viewport
-        const padding = 10;
-        newX = Math.min(Math.max(padding, newX), window.innerWidth - noRect.width - padding);
-        newY = Math.min(Math.max(100, newY), window.innerHeight - noRect.height - padding);
+            if (distToNo < noMaxDist) {
+                // Shrink logic
+                noScale = Math.max(0.5, (distToNo / noMaxDist));
+                
+                // Restricted move logic
+                translateX = (Math.random() - 0.5) * 2 * maxNoMovement;
+                translateY = (Math.random() - 0.5) * 2 * maxNoMovement;
+            }
+            
+            noBtn.style.transform = `translate(${translateX}px, ${translateY}px) scale(${noScale})`;
+        });
 
-        noBtn.style.left = `${newX}px`;
-        noBtn.style.top = `${newY}px`;
-      }
-    });
+        // --- SUCCESS STATE ---
+        yesBtn.addEventListener('click', () => {
+            questionText.innerText = "YAAAAY! MAHAL KO TALAGA YANG KUYA LEVS KOOO!!!";
+            headerContainer.classList.add('text-box-active');
+            body.classList.add('celebrate');
+            yesBtn.style.display = 'none';
+            noBtn.style.display = 'none';
+            music.play().catch(e => console.log("Music play blocked"));
+        });
 
-    yesBtn.addEventListener('click', () => {
-      document.body.classList.add('celebrate');
-      title.textContent = 'YAAAAY! MAHAL KO TALAGA YANG KUYA LEVS KOOO!!!';
-      document.querySelector('.buttons').style.display = 'none';
-    });
-  </script>
+        document.body.addEventListener('click', () => {
+            music.play();
+        }, { once: true });
+    </script>
 </body>
 </html>
